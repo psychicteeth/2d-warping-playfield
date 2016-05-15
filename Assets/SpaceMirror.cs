@@ -18,6 +18,9 @@ public class SpaceMirror : MonoBehaviour {
     Light myLight = null;
     GameObject avatar = null;
 
+    // use meshes to reproduce visuals across arena edges? If not, we use cameras.
+    public bool UseMeshDuplication = false;
+
     public void OnDrawGizmos()
     {
         // only draw the gang if it exists
@@ -106,17 +109,20 @@ public class SpaceMirror : MonoBehaviour {
                         // may need to update these for real time light changes
                         lights[i] = light;
                     }
-                    // mesh
-                    MeshRenderer myMr = avatar.GetComponent<MeshRenderer>();
-                    MeshFilter myMf = avatar.GetComponent<MeshFilter>();
-                    if (myMr != null)
+                    if (UseMeshDuplication)
                     {
-                        if (avatar.GetComponent<MeshRenderer>() != null)
+                        // mesh
+                        MeshRenderer myMr = avatar.GetComponent<MeshRenderer>();
+                        MeshFilter myMf = avatar.GetComponent<MeshFilter>();
+                        if (myMr != null)
                         {
-                            MeshFilter mf = gangAvatars[i].AddComponent<MeshFilter>();
-                            mf.mesh = myMf.sharedMesh;
-                            MeshRenderer mr = gangAvatars[i].AddComponent<MeshRenderer>();
-                            mr.sharedMaterial = myMr.sharedMaterial;
+                            if (avatar.GetComponent<MeshRenderer>() != null)
+                            {
+                                MeshFilter mf = gangAvatars[i].AddComponent<MeshFilter>();
+                                mf.mesh = myMf.sharedMesh;
+                                MeshRenderer mr = gangAvatars[i].AddComponent<MeshRenderer>();
+                                mr.sharedMaterial = myMr.sharedMaterial;
+                            }
                         }
                     }
                     gangAvatars[i].name = name + " avatar doppelganger " + i;
