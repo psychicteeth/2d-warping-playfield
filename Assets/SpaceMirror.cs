@@ -1,23 +1,26 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-/// This class created mirrored gameobjects as children to make them show up physically in the wrapped game arena
+/// SpaceMirror creates virtual copies of a gameobject so that they can show up when the object goes off one edge of the play field.
+/// It deals with circle colliders and meshes and lights.
 public class SpaceMirror : MonoBehaviour {
 	
-	Arena arena;
+	Arena arena; // reference to the arena so we can refer to its size.
 
-    GameObject[] gang; // the physics objects
-    GameObject[] gangAvatars; // the meshes
-    Light[] lights;
+    GameObject[] gang; // the physics objects.
+    GameObject[] gangAvatars; // the meshes / etc.
+    Light[] lights; // references to the lights so they can be updated in real time.
 
-    public float radius = 20.0f;
+    public float radius = 20.0f; // define the size of the object in this class. Later it could be elsewhere and just referred to from this class.
 
+    // various other references we use.
     CircleCollider2D c2d = null;
     Light myLight = null;
     GameObject avatar = null;
 
     public void OnDrawGizmos()
     {
+        // only draw the gang if it exists
         if (gang != null)
         {
             Gizmos.color = Color.blue;
@@ -33,8 +36,12 @@ public class SpaceMirror : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+        // if there's no collision object then we don't need to make collision doppelgangers
         c2d = GetComponent<CircleCollider2D>();
+
         arena = GameObject.FindObjectOfType<Arena>();
+
+        // try to find the avatar (mesh + light etc) - unlikely, but some things might not have one e.g. solitary lights
         Transform t = transform.FindChild("Avatar");
         if (t != null)
         {
@@ -44,7 +51,10 @@ public class SpaceMirror : MonoBehaviour {
 
         if (transform.parent == null)
         {
-            // optimisation here: can reduce this to 3 doppelgangers and move them around depending on where the object is on the arena.
+            // optimisation here: instead of having 8 doppelgangers surrounding us, reduce this
+            // to 3 doppelgangers and move them around depending on where the object is on the arena.
+            // so if the object is in the lower left of the arena then the duplicated need to be in the
+            // right and top regions.
 
             if (c2d != null)
             {
@@ -55,7 +65,10 @@ public class SpaceMirror : MonoBehaviour {
 
             if (avatar != null)
             {
-                gangAvatars = new GameObject[3]; // the avatar can rotate so it can't be attached to the collider
+                gangAvatars = new GameObject[3]; 
+                // the avatar can rotate so it can't be attached to the collider! 
+                // If the original collider rotates, the children rotate along with it and the whole
+                // frame of duplicates stops matching the orientation of the arena.
             }
 
             if (myLight != null)
@@ -65,6 +78,7 @@ public class SpaceMirror : MonoBehaviour {
             
             for (int i = 0; i < 3; i++)
             {
+                // only bother creating objects to hold the collision components if there is a collider on the original object.
                 if (c2d != null)
                 {
                     gang[i] = new GameObject();
@@ -75,13 +89,14 @@ public class SpaceMirror : MonoBehaviour {
                     }
                     gang[i].name = name + " doppelganger " + i;
                     gang[i].transform.position = transform.position;
+                    // set the parent so that it moves exactly as the original object does
                     gang[i].transform.SetParent(transform);
                 }
 
                 if (avatar != null)
                 {
                     gangAvatars[i] = new GameObject();
-                    // the light should be on the avatar
+                    // the light should be on the avatar, not the collider, so that it can rotate if it's a spot light
                     if (myLight != null)
                     {
                         Light light = gangAvatars[i].AddComponent<Light>();
@@ -115,32 +130,50 @@ public class SpaceMirror : MonoBehaviour {
 	
 	// Update is called once per frame
     void Update () {
+        // warp to the other side of the arena if we've gone outside.
         if (transform.position.x < 0) transform.position += new Vector3(arena.width, 0, 0);
         if (transform.position.x > arena.width) transform.position += new Vector3(-arena.width, 0, 0);
         if (transform.position.y < 0) transform.position += new Vector3(0, arena.height, 0);
         if (transform.position.y > arena.height) transform.position += new Vector3(0, -arena.height, 0);
 
+        // update the light duplicates in case the light changed its range or colour etc
+        if (myLight != null)
+        {
+            for (int i = 0; i < 3; i++)
+            {
+                lights[i].color = myLight.color;
+                lights[i].range = myLight.range;
+                lights[i].intensity = myLight.intensity;
+            }
+        }
+
+        // we turn off the duplicate entities if they're not required. They're only needed if we're near the edge of the screen.
         float maxRange = radius;
         if (myLight != null) maxRange = Mathf.Max(myLight.range, radius);
-        // respot the three doppelgangers so they appear on the right side of the arena relative to the object
+        // respot the three doppelgangers so they appear on the correct side of the arena relative to the object
         bool xGutter = true;
         if (transform.position.x > maxRange && transform.position.x < arena.width - maxRange)
         {
+            // not in the gutter so we can diable the x duplicates
             xGutter = false;
             if (gang != null) gang[0].SetActive(false);
             if (gangAvatars != null) gangAvatars[0].SetActive(false);
         }
         else
         {
+            // enable the x duplicates so collisions with the other side of the arena can happen.
             if (gang != null) gang[0].SetActive(true);
             if (gangAvatars != null) gangAvatars[0].SetActive(true);
+            // ensure the dupes are on the right side of the object
             if (transform.position.x > arena.width/2)
             {
+                // we're in the right half of the arena so make the objects appear on the left
                 if (gang != null) gang[0].transform.localPosition = new Vector3(-arena.width,0,0);
                 if (gangAvatars != null) gangAvatars[0].transform.localPosition = new Vector3(-arena.width,0,0);
             }
             else 
             {
+                // put the dupes on the right hand side.
                 if (gang != null) gang[0].transform.localPosition = new Vector3(arena.width,0,0);
                 if (gangAvatars != null) gangAvatars[0].transform.localPosition = new Vector3(arena.width,0,0);
             }
@@ -169,6 +202,7 @@ public class SpaceMirror : MonoBehaviour {
             }
         }
 
+        // the corner duplicate should be on the same x and y side as the other two, so just add their positions together.
         if (yGutter || xGutter)
         {
             if (gang != null) 
@@ -184,19 +218,10 @@ public class SpaceMirror : MonoBehaviour {
         }
         else
         {
+            // not needed as we're fully inside the arena.
             if (gang != null) gang[2].SetActive(false);
             if (gangAvatars != null) gangAvatars[2].SetActive(false);
         }
 
-        // the light should be on the avatar
-        if (myLight != null)
-        {
-            for (int i = 0; i < 3; i++)
-            {
-                lights[i].color = myLight.color;
-                lights[i].range = myLight.range;
-                lights[i].intensity = myLight.intensity;
-            }
-        }
 	}
 }

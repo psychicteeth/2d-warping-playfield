@@ -2,6 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 
+/// <summary>
+/// Procedural mesh. Just a simple class to create meshes.
+/// </summary>
 public class ProceduralMesh : MonoBehaviour {
 
     Mesh mesh;

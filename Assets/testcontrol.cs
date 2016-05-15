@@ -10,6 +10,7 @@ public class testcontrol : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+        // yeah yeah, what's an axis anyway.
         if (Input.GetKey(KeyCode.UpArrow ))r.AddForce(Vector2.up * 500);
         if (Input.GetKey(KeyCode.DownArrow ))r.AddForce(Vector2.down * 500);
         if (Input.GetKey(KeyCode.LeftArrow ))r.AddForce(Vector2.left * 500);
