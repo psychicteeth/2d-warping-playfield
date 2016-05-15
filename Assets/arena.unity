@@ -1205,18 +1205,15 @@ Prefab:
       propertyPath: m_Name
       value: Testmirror (2)
       objectReference: {fileID: 0}
-    - target: {fileID: 50000014252251730, guid: 41381eed017f04b85b4448f4aba5146b,
-        type: 2}
+    - target: {fileID: 0}
       propertyPath: m_Mass
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 50000014252251730, guid: 41381eed017f04b85b4448f4aba5146b,
-        type: 2}
+    - target: {fileID: 0}
       propertyPath: m_UseAutoMass
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 58000011811575582, guid: 41381eed017f04b85b4448f4aba5146b,
-        type: 2}
+    - target: {fileID: 0}
       propertyPath: m_Density
       value: 0.01
       objectReference: {fileID: 0}

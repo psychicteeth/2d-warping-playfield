@@ -22,6 +22,8 @@ GameObject:
   - 33: {fileID: 33000014124440246}
   - 23: {fileID: 23000012599595704}
   - 114: {fileID: 114000012919134154}
+  - 58: {fileID: 58000013115613504}
+  - 50: {fileID: 50000012328935496}
   m_Layer: 0
   m_Name: Avatar
   m_TagString: Untagged
@@ -38,8 +40,6 @@ GameObject:
   m_Component:
   - 4: {fileID: 4000012873853438}
   - 114: {fileID: 114000010050194292}
-  - 58: {fileID: 58000011811575582}
-  - 50: {fileID: 50000014252251730}
   m_Layer: 0
   m_Name: Testmirror
   m_TagString: Untagged
@@ -109,13 +109,13 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1000010298516292}
   m_Mesh: {fileID: 0}
---- !u!50 &50000014252251730
+--- !u!50 &50000012328935496
 Rigidbody2D:
   serializedVersion: 2
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000011900929344}
+  m_GameObject: {fileID: 1000010298516292}
   m_UseAutoMass: 0
   m_Mass: 1
   m_LinearDrag: 0
@@ -125,15 +125,15 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 4
---- !u!58 &58000011811575582
+  m_Constraints: 0
+--- !u!58 &58000013115613504
 CircleCollider2D:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000011900929344}
+  m_GameObject: {fileID: 1000010298516292}
   m_Enabled: 1
-  m_Density: 0.01
+  m_Density: 1
   m_Material: {fileID: 6200000, guid: c668e8e6beac94177a3eebe880952853, type: 2}
   m_IsTrigger: 0
   m_UsedByEffector: 0
@@ -152,6 +152,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   radius: 20
+  UseMeshDuplication: 0
 --- !u!114 &114000012919134154
 MonoBehaviour:
   m_ObjectHideFlags: 1

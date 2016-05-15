@@ -3,9 +3,15 @@ using System.Collections;
 
 public class testcontrol : MonoBehaviour {
     Rigidbody2D r ;
-	// Use this for initialization
-	void Start () {
-        r = GetComponent<Rigidbody2D>();
+    GameObject avatar = null;
+    // Use this for initialization
+    void Start () {
+        Transform t = transform.FindChild("Avatar");
+        if (t != null)
+        {
+            avatar = t.gameObject;
+            r = avatar.GetComponent<Rigidbody2D>();
+        }
 	}
 	
 	// Update is called once per frame
