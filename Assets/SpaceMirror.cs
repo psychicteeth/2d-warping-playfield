@@ -41,13 +41,13 @@ public class SpaceMirror : MonoBehaviour {
 	void Start () {
 
         arena = GameObject.FindObjectOfType<Arena>();
+        rb = GetComponent<Rigidbody2D>();
 
         // try to find the avatar (mesh + light etc) - unlikely, but some things might not have one e.g. solitary lights
         Transform t = transform.FindChild("Avatar");
         if (t != null)
         {
             avatar = t.gameObject;
-            rb = avatar.GetComponent<Rigidbody2D>();
             myLight = avatar.GetComponent<Light>();
             c2d = avatar.GetComponent<CircleCollider2D>();
         }

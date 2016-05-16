@@ -10,7 +10,7 @@ public class testcontrol : MonoBehaviour {
         if (t != null)
         {
             avatar = t.gameObject;
-            r = avatar.GetComponent<Rigidbody2D>();
+            r = GetComponent<Rigidbody2D>();
         }
 	}
 	
