@@ -15,8 +15,9 @@ public class ProceduralMesh : MonoBehaviour {
     List<Vector3> refPos = new List<Vector3>();
     List<int> tris = new List<int>();
 
-    public void Tri(Vector3 p1, Vector3 p2, Vector3 p3, Color col, Vector3 normal)
+    public void Tri(Vector3 p1, Vector3 p2, Vector3 p3, Color col, Vector3 normal, float shininess)
     {
+        col.a = shininess;
         int n = verts.Count;
         Vector3 centroid = (p1 + p2 + p3) / 3;
         refPos.Add(p1 - centroid);
@@ -50,7 +51,7 @@ public class ProceduralMesh : MonoBehaviour {
             Vector3 pos = new Vector3(Mathf.Sin(angle) * heights[i], Mathf.Cos(angle) * heights[i], 0);
             Vector3 pos2 = new Vector3(Mathf.Sin(angle + section) * heights[j], Mathf.Cos(angle + section) * heights[j], 0);
             Vector3 normal = new Vector3(Mathf.Sin(angle + section/ 2), Mathf.Cos(angle + section/2), 0);
-            Tri(centre, pos, pos2, color, normal);
+            Tri(centre, pos, pos2, color, normal, (float)i / 7.0f);
             angle += section;
         }
     }

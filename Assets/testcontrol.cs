@@ -12,14 +12,23 @@ public class testcontrol : MonoBehaviour {
             avatar = t.gameObject;
             r = GetComponent<Rigidbody2D>();
         }
+        Cursor.lockState = CursorLockMode.Locked;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-        // yeah yeah, what's an axis anyway.
-        if (Input.GetKey(KeyCode.UpArrow ))r.AddForce(avatar.transform.up * 500);
-        if (Input.GetKey(KeyCode.DownArrow ))r.AddForce(avatar.transform.up * -500);
-        if (Input.GetKey(KeyCode.LeftArrow )) avatar.transform.Rotate(new Vector3(0,0,Time.deltaTime * 100));
-        if (Input.GetKey(KeyCode.RightArrow ))avatar.transform.Rotate(new Vector3(0,0,Time.deltaTime * -100));
+        Vector3 thrust = avatar.transform.up * 500;
+        bool thrusting = false;
+        if (Input.GetKey(KeyCode.UpArrow )) thrusting = true;
+        if (Input.GetMouseButton(1)) thrusting = true;
+
+        if (thrusting) r.AddForce(thrust);
+        float angle = Time.deltaTime * 200;
+        if (Input.GetKey(KeyCode.LeftArrow )) avatar.transform.Rotate(new Vector3(0,0,angle));
+        if (Input.GetKey(KeyCode.RightArrow ))avatar.transform.Rotate(new Vector3(0,0,angle));
+        avatar.transform.Rotate(new Vector3(0, 0, angle * Input.GetAxis("Mouse X")));
+
+        //if (Input.GetKeyDown(KeyCode.Escape)) Cursor.l
+
 	}
 }

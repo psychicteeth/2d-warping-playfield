@@ -44,6 +44,7 @@
 				float4 refPos = float4(v.uv,0);
 				o.vertex = mul(UNITY_MATRIX_MVP, v.vertex + refPos);
 				o.col = v.col;
+				o.col.a = 1;
 				float3 viewPos = mul(UNITY_MATRIX_MV, v.vertex);
 				// get vertex normal in world space
                 //half3 worldNormal = UnityObjectToWorldNormal(v.normal);
@@ -52,7 +53,8 @@
                 //half nl = max(0, dot(worldNormal, _WorldSpaceLightPos0.xyz));
                 // factor in the light color
                 //o.col = nl * _LightColor0;
-                for (int i =0; i< 8; i++)
+				float shiny = v.col.a;
+                for (int i = 0; i < 8; i++)
                 {                	
                		half3 toLight = unity_LightPosition[i].xyz - viewPos;
                 	half lightRange = sqrt(unity_LightAtten[i].w);
@@ -61,8 +63,8 @@
 					fixed3 lightDirObj = mul( (float3x3)UNITY_MATRIX_T_MV, toLight);	//View => model
  
 					lightDirObj = normalize(lightDirObj);
- 
-					fixed diff = max ( 0, dot (v.normal, lightDirObj) );
+					fixed d = (dot(v.normal, lightDirObj) + 1.0f) / 2.0f;
+					fixed diff = d / (d + (1.f + v.col.a * 10.0f));//pow(( d , (v.col.a + 0.2f) * 10.0f);
 
                 	o.col.rgb += unity_LightColor[i].rgb * atten * diff;
 
