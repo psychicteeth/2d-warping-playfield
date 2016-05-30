@@ -12,14 +12,19 @@ public class ProceduralMesh : MonoBehaviour {
     List<Vector3> verts = new List<Vector3>();
     List<Color> cols = new List<Color>();
     List<Vector3> normals = new List<Vector3>();
+    List<Vector3> refPos = new List<Vector3>();
     List<int> tris = new List<int>();
 
     public void Tri(Vector3 p1, Vector3 p2, Vector3 p3, Color col, Vector3 normal)
     {
         int n = verts.Count;
-        verts.Add(p1);
-        verts.Add(p2);
-        verts.Add(p3);
+        Vector3 centroid = (p1 + p2 + p3) / 3;
+        refPos.Add(p1 - centroid);
+        refPos.Add(p2 - centroid);
+        refPos.Add(p3 - centroid);
+        verts.Add(centroid);
+        verts.Add(centroid);
+        verts.Add(centroid);
         tris.Add(n);
         tris.Add(n+1);
         tris.Add(n+2);
@@ -57,6 +62,7 @@ public class ProceduralMesh : MonoBehaviour {
         mesh.triangles = tris.ToArray();
         mesh.colors = cols.ToArray();
         mesh.normals = normals.ToArray();
+        mesh.SetUVs(0, refPos);
         mesh.RecalculateBounds();
     }
 

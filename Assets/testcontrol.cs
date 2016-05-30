@@ -17,9 +17,9 @@ public class testcontrol : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         // yeah yeah, what's an axis anyway.
-        if (Input.GetKey(KeyCode.UpArrow ))r.AddForce(Vector2.up * 500);
-        if (Input.GetKey(KeyCode.DownArrow ))r.AddForce(Vector2.down * 500);
-        if (Input.GetKey(KeyCode.LeftArrow ))r.AddForce(Vector2.left * 500);
-        if (Input.GetKey(KeyCode.RightArrow ))r.AddForce(Vector2.right * 500);
+        if (Input.GetKey(KeyCode.UpArrow ))r.AddForce(avatar.transform.up * 500);
+        if (Input.GetKey(KeyCode.DownArrow ))r.AddForce(avatar.transform.up * -500);
+        if (Input.GetKey(KeyCode.LeftArrow )) avatar.transform.Rotate(new Vector3(0,0,Time.deltaTime * 100));
+        if (Input.GetKey(KeyCode.RightArrow ))avatar.transform.Rotate(new Vector3(0,0,Time.deltaTime * -100));
 	}
 }
