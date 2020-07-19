@@ -6,7 +6,7 @@ public class testcontrol : MonoBehaviour {
     GameObject avatar = null;
     // Use this for initialization
     void Start () {
-        Transform t = transform.FindChild("Avatar");
+        Transform t = transform.Find("Avatar");
         if (t != null)
         {
             avatar = t.gameObject;

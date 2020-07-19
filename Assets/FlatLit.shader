@@ -1,4 +1,6 @@
-﻿Shader "Unlit/FlatLit"
+﻿// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
+
+Shader "Unlit/FlatLit"
 {
 	Properties
 	{
@@ -42,7 +44,7 @@
 			{
 				v2f o;
 				float4 refPos = float4(v.uv,0);
-				o.vertex = mul(UNITY_MATRIX_MVP, v.vertex + refPos);
+				o.vertex = UnityObjectToClipPos(v.vertex + refPos);
 				o.col = v.col;
 				o.col.a = 1;
 				float3 viewPos = mul(UNITY_MATRIX_MV, v.vertex);

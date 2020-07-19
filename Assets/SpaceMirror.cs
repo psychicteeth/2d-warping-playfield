@@ -44,7 +44,7 @@ public class SpaceMirror : MonoBehaviour {
         rb = GetComponent<Rigidbody2D>();
 
         // try to find the avatar (mesh + light etc) - unlikely, but some things might not have one e.g. solitary lights
-        Transform t = transform.FindChild("Avatar");
+        Transform t = transform.Find("Avatar");
         if (t != null)
         {
             avatar = t.gameObject;
